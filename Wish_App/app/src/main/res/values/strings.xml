@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Wish_APP</string>
+    <string name="lucky_p">The name to be displayed on card</string>
+    <string name="enter_n">Enter The name</string>
+</resources>
