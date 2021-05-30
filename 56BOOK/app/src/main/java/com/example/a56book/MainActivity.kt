@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.widget.Toast
+import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.a56book.models.IPostAdapter
@@ -13,12 +15,14 @@ import com.example.a56book.models.Post
 import com.example.a56book.models.PostAdapter
 import com.example.a56book.userDAO.PostDao
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
+import com.google.android.gms.common.SignInButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import kotlinx.coroutines.DEBUG_PROPERTY_VALUE_AUTO
-import kotlin.math.log
+import com.google.firebase.ktx.Firebase
 
-class MainActivity() : AppCompatActivity(), IPostAdapter {
+class MainActivity() : AppCompatActivity(), IPostAdapter,NoticeDialogFragment.NoticeDialogListener{
     private lateinit var adapter: PostAdapter
     private lateinit var recyclerView : RecyclerView
     private lateinit var postDao : PostDao
@@ -47,11 +51,16 @@ class MainActivity() : AppCompatActivity(), IPostAdapter {
     }
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.logOutButton -> {
-           val logout = LogOutActivity()
-            logout.show(
-                    supportFragmentManager, LogOutActivity.TAG)
+
+
+
+                // Create an instance of the dialog fragment and show it
+                val dialog = NoticeDialogFragment()
+                dialog.show(supportFragmentManager, "NoticeDialogFragment")
+
             true
         }
+
 
 
 
@@ -61,6 +70,8 @@ class MainActivity() : AppCompatActivity(), IPostAdapter {
             super.onOptionsItemSelected(item)
         }
     }
+
+
 
     private fun setUpRecyclerView() {
         postDao = PostDao()
@@ -81,6 +92,7 @@ class MainActivity() : AppCompatActivity(), IPostAdapter {
         adapter.startListening()
     }
 
+
     override fun onStop() {
         super.onStop()
         adapter.stopListening()
@@ -89,4 +101,25 @@ class MainActivity() : AppCompatActivity(), IPostAdapter {
     override fun onLikeClicked(postId: String) {
         postDao.updateLikes(postId)
     }
+
+    override  fun onDialogPositiveClick(dialog: DialogFragment) {
+
+        val auth = Firebase.auth
+        auth.signOut()
+        val signActitvity= Intent(this,SignINActivity::class.java)
+        startActivity(signActitvity)
+        auth.signOut()
+
+    }
+
+
+    override fun onDialogNegativeClick(dialog: DialogFragment) {
+        val text = "Cool Enjoy your posts"
+        val duration = Toast.LENGTH_SHORT
+
+        val toast = Toast.makeText(applicationContext, text, duration)
+        toast.show()
+        // User touched the dialog's negative button
+    }
+
 }
