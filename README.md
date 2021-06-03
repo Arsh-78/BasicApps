@@ -1,4 +1,4 @@
-# BasicApps
+# BasicApps \n
 Some of the initial apps I made while learning 
 1.56BOOK app is a social media app that uses firebase firestore to allow users to sign in post and like facilities,various features like recycler view firbase bomb and aauthentication are also used
 2.Notes App is recycler view based project which implements MVVM architecture also uses coroutines for some part
